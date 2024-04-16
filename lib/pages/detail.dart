@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:travel_agency/data/constants.dart';
 import 'package:travel_agency/data/data.dart';
 import 'package:travel_agency/pages/packages.dart';
