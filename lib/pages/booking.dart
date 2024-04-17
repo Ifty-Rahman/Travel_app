@@ -114,32 +114,42 @@ class _BookingPageState extends State<BookingPage> {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  // Save booking to Firestore
-                  String? userEmail = FirebaseAuth.instance.currentUser?.email;
-                  if (userEmail != null) {
-                    FirebaseFirestore.instance.collection('bookings').add({
-                      'country': widget.country,
-                      'package': widget.package,
-                      'price': totalPrice,
-                      'date': _selectedDate,
-                      'numberOfPersons': _numberOfPersons,
-                      'email': userEmail, // Save user's email
-                    }).then((value) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Booking Successful!'),
-                        ),
-                      );
-                    }).catchError((error) {
-                      print('Failed to add booking: $error');
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Failed to add booking!'),
-                        ),
-                      );
-                    });
+                  // Check if date is selected
+                  if (_selectedDate == null) {
+                    // Show snackbar if date is not selected
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Please select a date!'),
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
                   } else {
-                    // Handle case where user is not authenticated or email is not available
+                    // Save booking to Firestore
+                    String? userEmail =
+                        FirebaseAuth.instance.currentUser?.email;
+                    if (userEmail != null) {
+                      FirebaseFirestore.instance.collection('bookings').add({
+                        'country': widget.country,
+                        'package': widget.package,
+                        'price': totalPrice,
+                        'date': _selectedDate,
+                        'numberOfPersons': _numberOfPersons,
+                        'email': userEmail, // Save user's email
+                      }).then((value) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Booking Successful!'),
+                          ),
+                        );
+                      }).catchError((error) {
+                        print('Failed to add booking: $error');
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Failed to add booking!'),
+                          ),
+                        );
+                      });
+                    }
                   }
                 },
                 child: Text('Book Now'),

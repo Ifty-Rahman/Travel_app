@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:travel_agency/data/add_data.dart';
 import 'package:travel_agency/pages/countries.dart';
 import 'package:travel_agency/pages/explore.dart';
+import 'package:travel_agency/pages/profile.dart';
 import 'package:travel_agency/pages/show_bookings.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -17,24 +18,27 @@ class AppDrawer extends StatelessWidget {
           children: [
             Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 25),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        'Hello User!     ',
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
-                      ),
-                      CircleAvatar(
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return ProfilePage();
+                            },
+                          ),
+                        );
+                      },
+                      child: CircleAvatar(
                         radius: 50, // Adjust the size of the user image
                         backgroundImage:
                             AssetImage('assets/images/profile_3.jpeg'),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
                 SizedBox(
                   height: 20,
@@ -185,3 +189,4 @@ class AppDrawer extends StatelessWidget {
     );
   }
 }
+

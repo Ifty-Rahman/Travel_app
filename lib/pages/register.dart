@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_agency/data/constants.dart';
 import 'package:material_text_fields/material_text_fields.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterPage extends StatefulWidget {
   final VoidCallback showLoginPage;
@@ -12,16 +13,18 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<RegisterPage> {
-  //text controllers
+  // Text controllers
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmpasswordController = TextEditingController();
+  final _usernameController = TextEditingController();
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmpasswordController.dispose();
+    _usernameController.dispose();
     super.dispose();
   }
 
@@ -29,10 +32,39 @@ class _MyWidgetState extends State<RegisterPage> {
     if (passwordConfirmed()) {
       if (_passwordController.text.trim().length >= 6) {
         try {
+          // Check if email already exists in Firestore
+          final existingUser = await FirebaseFirestore.instance
+              .collection('users')
+              .doc(_emailController.text.trim())
+              .get();
+
+          if (existingUser.exists) {
+            // Show snackbar if email already exists
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                    "Email already exists! Try logging in or use a different email"),
+                duration: Duration(seconds: 5),
+              ),
+            );
+            return; // Stop execution
+          }
+
+          // Create user in Firebase Authentication
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
             email: _emailController.text.trim(),
             password: _passwordController.text.trim(),
           );
+
+          // Save user details to Firestore with email as document ID
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(_emailController.text.trim())
+              .set({
+            'email': _emailController.text.trim(),
+            'username': _usernameController.text.trim(),
+          });
+
           // User successfully created
         } catch (error) {
           // Handle any errors
@@ -107,6 +139,23 @@ class _MyWidgetState extends State<RegisterPage> {
 
               SizedBox(
                 height: 50,
+              ),
+
+              // Username text field
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 25),
+                child: MaterialTextField(
+                  controller: _usernameController,
+                  keyboardType: TextInputType.text,
+                  hint: 'Username',
+                  textInputAction: TextInputAction.next,
+                  prefixIcon: const Icon(Icons.person_outline),
+                  suffixIcon: const Icon(Icons.text_fields),
+                ),
+              ),
+
+              SizedBox(
+                height: 10,
               ),
 
               // email box

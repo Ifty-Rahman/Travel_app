@@ -57,10 +57,12 @@ class _ShowBookingsPageState extends State<ShowBookingsPage> {
                   itemCount: _bookings.length,
                   itemBuilder: (context, index) {
                     final booking = _bookings[index];
-                    // Format the date
-                    final formattedDate = DateFormat('dd-MM-yyyy').format(
-                      (booking['date'] as Timestamp).toDate(),
-                    );
+                    // Check if the 'date' field is not null
+                    final date = booking['date'];
+                    final formattedDate = date != null
+                        ? DateFormat('dd-MM-yyyy')
+                            .format((date as Timestamp).toDate())
+                        : 'N/A';
                     return Padding(
                       padding: const EdgeInsets.all(10),
                       child: Material(
