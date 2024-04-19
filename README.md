@@ -23,7 +23,7 @@ The Travel Agency App is a mobile application developed using Flutter and Fireba
 1. Clone the repository to your local machine:
 
 ```bash
-  git clone https://github.com/your_username/travel_agency.git
+  git clone https://github.com/Ifty-Rahman/Travel_app.git
 ```
 2. Navigate to the project directory:
 
