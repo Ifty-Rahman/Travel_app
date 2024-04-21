@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_agency/data/constants.dart';
 import 'package:material_text_fields/material_text_fields.dart';
+import 'package:travel_agency/pages/admin_home.dart';
+import 'package:travel_agency/pages/admin_login.dart';
 import 'package:travel_agency/pages/forgot_password.dart';
 
 class LoginPage extends StatefulWidget {
@@ -16,11 +18,29 @@ class _MyWidgetState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  Future signIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim());
+  Future<void> signIn() async {
+  try {
+    final UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: _emailController.text.trim(),
+      password: _passwordController.text.trim(),
+    );
+
+    // Get the user's email
+    final String userEmail = userCredential.user!.email!;
+    
+    // Check if the user is an admin
+    if (userEmail == 'owner@gmail.com') {
+      // Navigate to the AddDataPage for admin
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => AddDataPage()),
+      );
+    } 
+  } catch (error) {
+    print("Error signing in: $error");
+    // Handle error (e.g., show error message)
   }
+}
 
   @override
   void dispose() {
@@ -159,6 +179,31 @@ class _MyWidgetState extends State<LoginPage> {
                     child: Text(
                       " Register now",
                       style: TextStyle(color: Colors.blue),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10,),
+
+              // admin button
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return AdminLoginPage();
+                          },
+                        ),
+                      );
+                    },
+                    child: Text(
+                      " Admin?",
+                      style: TextStyle(color: Colors.orange),
                     ),
                   ),
                 ],

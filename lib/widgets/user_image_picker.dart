@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserImagePicker extends StatefulWidget {
   const UserImagePicker({Key? key, required this.onPickImage})
@@ -17,6 +19,27 @@ class UserImagePicker extends StatefulWidget {
 
 class _UserImagePickerState extends State<UserImagePicker> {
   File? _pickedImageFile;
+  String? _userImageUrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _getUserImageUrl();
+  }
+
+  void _getUserImageUrl() async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      final userEmail = currentUser.email!;
+      final userDoc = FirebaseFirestore.instance.collection('users').doc(userEmail);
+      final userData = await userDoc.get();
+      if (userData.exists) {
+        setState(() {
+          _userImageUrl = userData['profile'];
+        });
+      }
+    }
+  }
 
   void _pickImage() async {
     final pickeImage = await ImagePicker().pickImage(
@@ -44,12 +67,15 @@ class _UserImagePickerState extends State<UserImagePicker> {
         CircleAvatar(
           radius: 80,
           backgroundColor: Colors.grey,
-          foregroundImage:
-              _pickedImageFile != null ? FileImage(_pickedImageFile!) : null,
+          foregroundImage: _pickedImageFile != null
+            ? FileImage(_pickedImageFile!) as ImageProvider<Object>?
+            : (_userImageUrl != null
+              ? NetworkImage(_userImageUrl!) as ImageProvider<Object>?
+              : null),
         ),
         Positioned(
           bottom: -7,
-          right: 175,
+          right: 191,
           child: IconButton(
             onPressed: _pickImage,
             icon: Icon(

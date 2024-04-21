@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:travel_agency/data/constants.dart';
-import 'package:travel_agency/pages/drawer.dart';
+import 'package:travel_agency/widgets/drawer.dart';
 import 'package:travel_agency/pages/packages.dart';
 import 'package:lottie/lottie.dart';
+import 'package:travel_agency/widgets/user_image_profile.dart';
 
 class CountryListPage extends StatefulWidget {
   @override
@@ -60,12 +61,7 @@ class _CountryListPageState extends State<CountryListPage> {
                 padding: const EdgeInsets.only(right: 5),
                 child: IconButton(
                   icon: ClipOval(
-                    child: Image.asset(
-                      'assets/images/profile_3.jpeg',
-                      width: 36,
-                      height: 36,
-                      fit: BoxFit.cover,
-                    ),
+                    child: UserProfileImage(),
                   ), // Change this to display user's picture
                   onPressed: () {
                     Scaffold.of(context).openEndDrawer();
@@ -91,17 +87,7 @@ class _CountryListPageState extends State<CountryListPage> {
               ),
             ),
             SizedBox(
-              height: 20,
-            ),
-            Text(
-              "     CHOOSE\n A COUNTRY!",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
-            ),
-            SizedBox(
-              height: 30,
+              height: 5,
             ),
             Expanded(
               child: ListView.builder(
@@ -109,41 +95,57 @@ class _CountryListPageState extends State<CountryListPage> {
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.only(
-                      bottom: 25,
                       left: 15,
                       right: 15,
-                    ),
-                    child: InkWell(
-                      onTap: () {
-                        // Navigate to PackagePage with the selected country
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PackagePage(
-                              selectedCountry: countries[index],
-                            ),
-                          ),
-                        );
-                      },
-                      child: Material(
-                        borderRadius: BorderRadius.circular(15),
-                        elevation: 2,
-                        child: ListTile(
-                          title: Center(
-                            child: Text(
-                              countries[index],
-                              style: TextStyle(
-                                color: kTextColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 23,
+                      top: 10,
+                      ),
+                    child: Card(
+                      clipBehavior: Clip.antiAlias,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      child: InkWell(
+                        onTap: () {
+                          // Navigate to PackagePage with the selected country
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PackagePage(
+                                selectedCountry: countries[index],
                               ),
                             ),
-                          ),
-                          tileColor:
-                              kSecondaryColor, // Use your desired color here
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
+                          );
+                        },
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            // Image
+                            Ink.image(
+                              image: NetworkImage("https://images.pexels.com/photos/1119972/pexels-photo-1119972.jpeg?cs=srgb&dl=pexels-jplenio-1119972.jpg&fm=jpg"),
+                              height: 150,
+                              fit: BoxFit.cover,
+                              ),
+                            // Semi-transparent overlay
+                            Container(
+                              height: 150,
+                              decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(0.4), // Adjust opacity as needed
+                              ),
+                            ),
+                            // Text
+                            ListTile(
+                              title: Center(
+                                child: Text(
+                                  countries[index],
+                                  style: TextStyle(
+                                    color: kTextColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 23,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),

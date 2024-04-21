@@ -3,7 +3,8 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_agency/data/constants.dart';
-import 'package:travel_agency/data/user_image_picker.dart';
+import 'package:travel_agency/widgets/user_image_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({Key? key}) : super(key: key);
@@ -18,40 +19,47 @@ class _ProfilePageState extends State<ProfilePage> {
   File? _selectedImage;
 
   Future<void> uploadImageToFirebaseStorage(File imageFile) async {
-    final userEmail = currentuser.email!;
-    final fileName = '$userEmail.jpg';
-    final firebaseStorageRef = firebase_storage.FirebaseStorage.instance
-        .ref('profile_images')
-        .child(fileName);
+  final userEmail = currentuser.email!;
+  final fileName = '$userEmail.jpg';
+  final firebaseStorageRef = firebase_storage.FirebaseStorage.instance
+      .ref('profile_images')
+      .child(fileName);
 
-    try {
-      await firebaseStorageRef.putFile(
-        imageFile,
-        firebase_storage.SettableMetadata(
-          cacheControl: 'max-age=0',
-        ),
-      );
-      final imageUrl = await firebaseStorageRef.getDownloadURL();
-      print(imageUrl);
+  try {
+    await firebaseStorageRef.putFile(
+      imageFile,
+      firebase_storage.SettableMetadata(
+        cacheControl: 'max-age=0',
+      ),
+    );
+    final imageUrl = await firebaseStorageRef.getDownloadURL();
 
-      // You can now use the imageUrl as needed (e.g., save it in Firestore)
+    // Fetch the user's document by email
+    final userDoc = FirebaseFirestore.instance
+        .collection('users')
+        .doc(userEmail);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Image uploaded successfully'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to upload image'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-      print('Error uploading image: $e');
-    }
+    // Update the document with the image URL
+    await userDoc.set({
+      'profile': imageUrl,
+    }, SetOptions(merge: true)); // Merge the data with existing document if it exists
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Image uploaded successfully'),
+        duration: Duration(seconds: 2),
+      ),
+    );
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Failed to upload image'),
+        duration: Duration(seconds: 2),
+      ),
+    );
+    print('Error uploading image: $e');
   }
+}
 
   @override
   Widget build(BuildContext context) {

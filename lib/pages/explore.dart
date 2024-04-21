@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:travel_agency/data/constants.dart';
 import 'package:travel_agency/data/data.dart';
 import 'package:travel_agency/pages/detail.dart';
-import 'package:travel_agency/pages/drawer.dart';
+import 'package:travel_agency/widgets/drawer.dart';
 import 'package:travel_agency/pages/packages.dart';
+import 'package:travel_agency/widgets/user_image_profile.dart';
+
 
 class Explore extends StatefulWidget {
   @override
@@ -32,14 +34,18 @@ class _ExploreState extends State<Explore> {
       backgroundColor: kBackgroundColor,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        automaticallyImplyLeading: false, // Hide the back button
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text(
-          "  Explore",
-          style: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
+        title: Padding(
+          padding: const EdgeInsets.only(left: 5,),
+          child: Text(
+            "  Explore",
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
           ),
         ),
         centerTitle: false,
@@ -50,12 +56,7 @@ class _ExploreState extends State<Explore> {
                 padding: const EdgeInsets.only(right: 5),
                 child: IconButton(
                   icon: ClipOval(
-                    child: Image.asset(
-                      'assets/images/profile_3.jpeg',
-                      width: 36,
-                      height: 36,
-                      fit: BoxFit.cover,
-                    ),
+                    child: UserProfileImage(),
                   ), // Change this to display user's picture
                   onPressed: () {
                     Scaffold.of(context).openEndDrawer();

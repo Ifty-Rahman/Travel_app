@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lottie/lottie.dart';
 import 'package:travel_agency/data/constants.dart';
 import 'package:travel_agency/data/get_data.dart';
-import 'package:travel_agency/pages/drawer.dart';
+import 'package:travel_agency/widgets/drawer.dart';
 import 'package:travel_agency/pages/booking.dart'; // Import the BookingPage
 
 class PackagePage extends StatefulWidget {
