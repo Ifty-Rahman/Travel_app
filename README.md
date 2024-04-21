@@ -29,7 +29,7 @@ The Travel Agency App is a mobile application developed using Flutter and Fireba
 
 
 ```bash
-  cd travel_agency
+  cd Travel_app
 ```
 3. Install dependencies:
 

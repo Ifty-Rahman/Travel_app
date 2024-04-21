@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:travel_agency/pages/admin_home.dart';
+import 'package:travel_agency/admin/admin_home.dart';
 
 
 class AdminLoginPage extends StatefulWidget {
