@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_agency/data/constants.dart';
 import 'package:material_text_fields/material_text_fields.dart';
-import 'package:travel_agency/admin/admin_home.dart';
 import 'package:travel_agency/admin/admin_login.dart';
 import 'package:travel_agency/pages/forgot_password.dart';
 
@@ -18,29 +17,36 @@ class _MyWidgetState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  Future<void> signIn() async {
+  Future signIn() async {
+    
+  // Show loading dialog
+    showDialog(
+      context: context, 
+      builder: (context) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+      );
+
+  // Sign in with email and password
   try {
-    final UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: _emailController.text.trim(),
       password: _passwordController.text.trim(),
     );
-
-    // Get the user's email
-    final String userEmail = userCredential.user!.email!;
-    
-    // Check if the user is an admin
-    if (userEmail == 'owner@gmail.com') {
-      // Navigate to the AddDataPage for admin
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => AddDataPage()),
-      );
-    } 
-  } catch (error) {
-    print("Error signing in: $error");
-    // Handle error (e.g., show error message)
+  } catch (e) {
+    // Show SnackBar if sign-in fails
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('  Email or password is incorrect!\n  Please enter the correct email and password.'),
+        duration: Duration(seconds: 3),
+      ),
+    );
   }
+  Navigator.of(context).pop();
 }
+
 
   @override
   void dispose() {

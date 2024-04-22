@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lottie/lottie.dart';
 import 'package:travel_agency/data/constants.dart';
 import 'package:travel_agency/data/get_data.dart';
-import 'package:travel_agency/widgets/drawer.dart';
 import 'package:travel_agency/pages/booking.dart'; // Import the BookingPage
 
 class PackagePage extends StatefulWidget {
@@ -60,31 +59,7 @@ class _PackagePageState extends State<PackagePage> {
             color: Colors.black,
           ),
         ),
-        centerTitle: false,
-        actions: <Widget>[
-          Builder(
-            builder: (BuildContext context) {
-              return Padding(
-                padding: const EdgeInsets.only(right: 5),
-                child: IconButton(
-                  icon: ClipOval(
-                    child: Image.asset(
-                      'assets/images/profile_3.jpeg',
-                      width: 36,
-                      height: 36,
-                      fit: BoxFit.cover,
-                    ),
-                  ), // Change this to display user's picture
-                  onPressed: () {
-                    Scaffold.of(context).openEndDrawer();
-                  },
-                ),
-              );
-            },
-          ),
-        ],
       ),
-      endDrawer: AppDrawer(),
       body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

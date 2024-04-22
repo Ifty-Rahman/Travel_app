@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:material_text_fields/material_text_fields.dart';
 import 'package:travel_agency/admin/admin_home.dart';
+import 'package:travel_agency/data/constants.dart';
 
 
 class AdminLoginPage extends StatefulWidget {
@@ -78,33 +80,95 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: kBackgroundColor,
       appBar: AppBar(
-        title: Text('Admin Login'),
+        backgroundColor: kBackgroundColor,
       ),
-      body: Padding(
-        padding: EdgeInsets.all(20.0),
+      body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                labelText: 'Email',
+            SizedBox(height: 40),
+            Image.asset(
+              'assets/images/admin.jpg',
+              width: 350,
+              height: 250,
+            ),
+            SizedBox(height: 10),
+      
+            Text(
+              "Welcome Admin!",
+              style: TextStyle(
+                fontSize: 27,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(255, 61, 133, 221),
               ),
             ),
-            SizedBox(height: 20.0),
-            TextField(
-              controller: _passwordController,
-              decoration: InputDecoration(
-                labelText: 'Password',
+      
+            Text(
+              'LogIn below with your details.',
+              style: TextStyle(
+                fontSize: 17,
               ),
-              obscureText: true,
             ),
-            SizedBox(height: 20.0),
-            ElevatedButton(
-              onPressed: signIn,
-              child: Text('Login'),
+      
+            SizedBox(
+              height: 50,
             ),
+      
+            // email box
+      
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 25),
+              child: MaterialTextField(
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
+                hint: 'Email',
+                textInputAction: TextInputAction.next,
+                prefixIcon: const Icon(Icons.email_outlined),
+                suffixIcon: const Icon(Icons.check),
+              ),
+            ),
+            SizedBox(height: 10),
+      
+            // password box
+      
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 25),
+              child: MaterialTextField(
+                controller: _passwordController,
+                keyboardType: TextInputType.visiblePassword,
+                hint: 'Password',
+                textInputAction: TextInputAction.done,
+                prefixIcon: const Icon(Icons.lock_outline),
+                suffixIcon: const Icon(Icons.visibility_off),
+                obscureText: true,
+              ),
+            ),
+            SizedBox(height: 30),
+      
+            // sign in button
+      
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+              child: GestureDetector(
+                onTap: signIn,
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 61, 133, 221),
+                      borderRadius: BorderRadius.circular(12)),
+                  child: Center(
+                    child: Text(
+                      "Sign In",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 25,),
           ],
         ),
       ),

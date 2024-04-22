@@ -21,7 +21,7 @@ class GetPackageData extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.only(left: 10),
             child: Text(
-              "${data["package"]} \nPrice: ${data["price"]}tk per person",
+              "${data["package"]} \nPrice: ${data["price"]}dollars per person for ${data["days"]} days",
               style: TextStyle(
                   color: kTextColor, fontWeight: FontWeight.bold, fontSize: 15),
             ),

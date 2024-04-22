@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:travel_agency/data/constants.dart';
-import 'package:travel_agency/widgets/drawer.dart';
 import 'package:travel_agency/pages/packages.dart';
 import 'package:lottie/lottie.dart';
-import 'package:travel_agency/widgets/user_image_profile.dart';
 
 class CountryListPage extends StatefulWidget {
   @override
@@ -53,26 +51,7 @@ class _CountryListPageState extends State<CountryListPage> {
             color: Colors.black,
           ),
         ),
-        centerTitle: false,
-        actions: <Widget>[
-          Builder(
-            builder: (BuildContext context) {
-              return Padding(
-                padding: const EdgeInsets.only(right: 5),
-                child: IconButton(
-                  icon: ClipOval(
-                    child: UserProfileImage(),
-                  ), // Change this to display user's picture
-                  onPressed: () {
-                    Scaffold.of(context).openEndDrawer();
-                  },
-                ),
-              );
-            },
-          ),
-        ],
       ),
-      endDrawer: AppDrawer(),
       body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

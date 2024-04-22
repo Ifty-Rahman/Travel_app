@@ -14,7 +14,9 @@ class _AddDataPageState extends State<AddDataPage> {
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _countryController = TextEditingController();
   final TextEditingController _packageController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _daysController = TextEditingController();
 
   File? _selectedImage;
 
@@ -42,8 +44,16 @@ class _AddDataPageState extends State<AddDataPage> {
               decoration: InputDecoration(labelText: 'Package'),
             ),
             TextField(
+              controller: _descriptionController,
+              decoration: InputDecoration(labelText: 'Description'),
+            ),
+            TextField(
               controller: _priceController,
               decoration: InputDecoration(labelText: 'Price'),
+            ),
+            TextField(
+              controller: _daysController,
+              decoration: InputDecoration(labelText: 'Days'),
             ),
             SizedBox(height: 20),
             _selectedImage != null
@@ -80,7 +90,12 @@ class _AddDataPageState extends State<AddDataPage> {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  getImageFromGalleryAndUpload();
+                  final ImagePicker _picker = ImagePicker();
+                  _picker.pickImage(source: ImageSource.gallery).then((image) {
+                    setState(() {
+                      _selectedImage = File(image!.path);
+                    });
+                  });
                 },
                 child: Text('Add Image'),
               ),
@@ -93,7 +108,9 @@ class _AddDataPageState extends State<AddDataPage> {
                     _cityController.text.trim(),
                     _countryController.text.trim(),
                     _packageController.text.trim(),
+                    _descriptionController.text.trim(),
                     int.parse(_priceController.text.trim()),
+                    int.parse(_daysController.text.trim()),
                   );
                 },
                 child: Text('Add Data'),
@@ -105,64 +122,51 @@ class _AddDataPageState extends State<AddDataPage> {
     );
   }
 
-  Future<void> getImageFromGalleryAndUpload() async {
-    final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedImage != null) {
-      setState(() {
-        _selectedImage = File(pickedImage.path);
-      });
-
-      // Upload the image to Firebase Storage
-      final countryName = _countryController.text.trim();
-      final imageName = '$countryName.jpg';
-      final Reference firebaseStorageRef =
-          FirebaseStorage.instance.ref().child('country_image/$imageName');
-
-      try {
-        await firebaseStorageRef.putFile(_selectedImage!);
-        print('Image uploaded to Firebase Storage successfully.');
-
-        // Get the image download URL
-        final imageUrl = await firebaseStorageRef.getDownloadURL();
-
-        // Add the image URL to Firestore
-        await FirebaseFirestore.instance
-            .collection('packages')
-            .doc(countryName)
-            .set({'country_image': imageUrl});
-
-        print('Image URL added to Firestore successfully.');
-      } catch (e) {
-        print('Error uploading image to Firebase Storage: $e');
-      }
-    } else {
-      print('No image selected.');
-    }
-  }
-
   Future<void> addPackageData(
-  String city, String country, String package, int price) async {
+  String city, String country, String package, String description, int price, int days) async {
   try {
     // Reference to the Firestore collection named "packages"
     final collectionRef = FirebaseFirestore.instance.collection('packages');
-    
-    // Upload data to Firestore with auto-generated document ID
-    await collectionRef.add({
-      'city': city,
-      'country': country,
-      'package': package,
-      'price': price,
-      'country_image': _selectedImage != null ? await uploadImageAndGetUrl(country) : null,
-    });
+
+    // Check if an image is selected
+    if (_selectedImage != null) {
+      // Upload image to Firebase Storage
+      String imageName = '${country.toLowerCase()}.jpg'; // Set image name
+      Reference storageRef =
+          FirebaseStorage.instance.ref().child('country_images/$imageName');
+      await storageRef.putFile(_selectedImage!);
+      String imageUrl = await storageRef.getDownloadURL();
+
+      // Add package data to Firestore with image URL
+      await collectionRef.add({
+        'city': city,
+        'country': country,
+        'package': package,
+        'description': description,
+        'price': price,
+        'days': days,
+        'country_image': imageUrl, // Store image URL in Firestore
+      });
+    } else {
+      // Add package data to Firestore without image URL
+      await collectionRef.add({
+        'city': city,
+        'country': country,
+        'package': package,
+        'description': description,
+        'price': price,
+        'days': days,
+      });
+    }
 
     print('Package data added successfully!');
     // Clear text fields after adding data
     _cityController.clear();
     _countryController.clear();
     _packageController.clear();
+    _descriptionController.clear();
     _priceController.clear();
+    _daysController.clear();
     setState(() {
       _selectedImage = null;
     });
@@ -170,30 +174,4 @@ class _AddDataPageState extends State<AddDataPage> {
     print('Error adding package data: $e');
   }
 }
-
-Future<String> uploadImageAndGetUrl(String countryName) async {
-  try {
-    final imageName = '$countryName.jpg';
-    final Reference firebaseStorageRef =
-        FirebaseStorage.instance.ref().child('country_image/$imageName');
-
-    // Set cache control to 'no-store' to ensure that the latest image is always fetched
-    final metadata = SettableMetadata(
-      cacheControl: 'no-store',
-    );
-
-    await firebaseStorageRef.putFile(
-      _selectedImage!,
-      metadata,
-    );
-
-    print('Image uploaded to Firebase Storage successfully.');
-    return await firebaseStorageRef.getDownloadURL();
-  } catch (e) {
-    print('Error uploading image to Firebase Storage: $e');
-    return '';
-  }
 }
-}
-
-
