@@ -20,14 +20,14 @@ class _MyWidgetState extends State<LoginPage> {
   Future signIn() async {
     
   // Show loading dialog
-    showDialog(
-      context: context, 
-      builder: (context) {
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      }
+  showDialog(
+    context: context, 
+    builder: (context) {
+      return Center(
+        child: CircularProgressIndicator(),
       );
+    }
+  );
 
   // Sign in with email and password
   try {

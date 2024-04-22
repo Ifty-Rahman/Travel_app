@@ -26,152 +26,183 @@ class _AddDataPageState extends State<AddDataPage> {
       appBar: AppBar(
         title: Text('Add Data'),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextField(
-              controller: _cityController,
-              decoration: InputDecoration(labelText: 'City'),
-            ),
-            TextField(
-              controller: _countryController,
-              decoration: InputDecoration(labelText: 'Country'),
-            ),
-            TextField(
-              controller: _packageController,
-              decoration: InputDecoration(labelText: 'Package'),
-            ),
-            TextField(
-              controller: _descriptionController,
-              decoration: InputDecoration(labelText: 'Description'),
-            ),
-            TextField(
-              controller: _priceController,
-              decoration: InputDecoration(labelText: 'Price'),
-            ),
-            TextField(
-              controller: _daysController,
-              decoration: InputDecoration(labelText: 'Days'),
-            ),
-            SizedBox(height: 20),
-            _selectedImage != null
-                ? Container(
-                  child: Card(
-                    clipBehavior: Clip.antiAlias,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Ink.image(
-                          image:  FileImage(_selectedImage!),
-                          height: 200,
-                          fit: BoxFit.cover,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextField(
+                controller: _cityController,
+                decoration: InputDecoration(labelText: 'City'),
+              ),
+              TextField(
+                controller: _countryController,
+                decoration: InputDecoration(labelText: 'Country'),
+              ),
+              TextField(
+                controller: _packageController,
+                decoration: InputDecoration(labelText: 'Package'),
+              ),
+              TextField(
+                controller: _descriptionController,
+                decoration: InputDecoration(labelText: 'Description'),
+              ),
+              TextField(
+                controller: _priceController,
+                decoration: InputDecoration(labelText: 'Price'),
+              ),
+              TextField(
+                controller: _daysController,
+                decoration: InputDecoration(labelText: 'Days'),
+              ),
+              SizedBox(height: 20),
+              _selectedImage != null
+                  ? Container(
+                      child: Card(
+                        clipBehavior: Clip.antiAlias,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
                         ),
-                      ],
-                    ),
-                  ),
-                )
-                : Container(
-                    child: Center(
-                      child: Column(
-                        children: [
-                          Icon(
-                            Icons.add_a_photo,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Ink.image(
+                              image: FileImage(_selectedImage!),
+                              height: 200,
+                              fit: BoxFit.cover,
                             ),
-                        ],
+                          ],
+                        ),
                       ),
+                    )
+                  : Container(
+                      child: Center(
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.add_a_photo,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-            SizedBox(height: 20),
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  final ImagePicker _picker = ImagePicker();
-                  _picker.pickImage(source: ImageSource.gallery).then((image) {
-                    setState(() {
-                      _selectedImage = File(image!.path);
-                    });
-                  });
-                },
-                child: Text('Add Image'),
+              SizedBox(height: 20),
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        final ImagePicker _picker = ImagePicker();
+                        _picker
+                            .pickImage(source: ImageSource.gallery)
+                            .then((image) {
+                          if (image != null) {
+                            setState(() {
+                              _selectedImage = File(image.path);
+                            });
+                          }
+                        });
+                      },
+                      child: Text(
+                        'Add Image',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _selectedImage = null;
+                        });
+                      },
+                      child: Text(
+                        'Clear Image',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            SizedBox(height: 20),
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  addPackageData(
-                    _cityController.text.trim(),
-                    _countryController.text.trim(),
-                    _packageController.text.trim(),
-                    _descriptionController.text.trim(),
-                    int.parse(_priceController.text.trim()),
-                    int.parse(_daysController.text.trim()),
-                  );
-                },
-                child: Text('Add Data'),
+              SizedBox(height: 30),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    addPackageData(
+                      _cityController.text.trim(),
+                      _countryController.text.trim(),
+                      _packageController.text.trim(),
+                      _descriptionController.text.trim(),
+                      int.parse(_priceController.text.trim()),
+                      int.parse(_daysController.text.trim()),
+                    );
+                  },
+                  child: Text(
+                    'Add Data',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Future<void> addPackageData(
-  String city, String country, String package, String description, int price, int days) async {
-  try {
-    // Reference to the Firestore collection named "packages"
-    final collectionRef = FirebaseFirestore.instance.collection('packages');
+  Future<void> addPackageData(String city, String country, String package,
+      String description, int price, int days) async {
+    try {
+      // Reference to the Firestore collection named "packages"
+      final collectionRef = FirebaseFirestore.instance.collection('packages');
 
-    // Check if an image is selected
-    if (_selectedImage != null) {
-      // Upload image to Firebase Storage
-      String imageName = '${country.toLowerCase()}.jpg'; // Set image name
-      Reference storageRef =
-          FirebaseStorage.instance.ref().child('country_images/$imageName');
-      await storageRef.putFile(_selectedImage!);
-      String imageUrl = await storageRef.getDownloadURL();
+      // Check if an image is selected
+      if (_selectedImage != null) {
+        // Upload image to Firebase Storage
+        String imageName = '${country.toLowerCase()}.jpg'; // Set image name
+        Reference storageRef =
+            FirebaseStorage.instance.ref().child('country_images/$imageName');
+        await storageRef.putFile(_selectedImage!);
+        String imageUrl = await storageRef.getDownloadURL();
 
-      // Add package data to Firestore with image URL
-      await collectionRef.add({
-        'city': city,
-        'country': country,
-        'package': package,
-        'description': description,
-        'price': price,
-        'days': days,
-        'country_image': imageUrl, // Store image URL in Firestore
+        // Add package data to Firestore with image URL
+        await collectionRef.add({
+          'city': city,
+          'country': country,
+          'package': package,
+          'description': description,
+          'price': price,
+          'days': days,
+          'country_image': imageUrl, // Store image URL in Firestore
+        });
+      } else {
+        // Add package data to Firestore without image URL
+        await collectionRef.add({
+          'city': city,
+          'country': country,
+          'package': package,
+          'description': description,
+          'price': price,
+          'days': days,
+        });
+      }
+
+      print('Package data added successfully!');
+      // Clear text fields after adding data
+      _cityController.clear();
+      _countryController.clear();
+      _packageController.clear();
+      _descriptionController.clear();
+      _priceController.clear();
+      _daysController.clear();
+      setState(() {
+        _selectedImage = null;
       });
-    } else {
-      // Add package data to Firestore without image URL
-      await collectionRef.add({
-        'city': city,
-        'country': country,
-        'package': package,
-        'description': description,
-        'price': price,
-        'days': days,
-      });
+    } catch (e) {
+      print('Error adding package data: $e');
     }
-
-    print('Package data added successfully!');
-    // Clear text fields after adding data
-    _cityController.clear();
-    _countryController.clear();
-    _packageController.clear();
-    _descriptionController.clear();
-    _priceController.clear();
-    _daysController.clear();
-    setState(() {
-      _selectedImage = null;
-    });
-  } catch (e) {
-    print('Error adding package data: $e');
   }
-}
 }

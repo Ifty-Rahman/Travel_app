@@ -29,6 +29,17 @@ class _MyWidgetState extends State<RegisterPage> {
   }
 
   Future<void> signUp(BuildContext context) async {
+
+    // Show loading dialog
+  showDialog(
+    context: context, 
+    builder: (context) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+  );
+
     if (passwordConfirmed()) {
       if (_passwordController.text.trim().length >= 6) {
         try {
@@ -86,9 +97,8 @@ class _MyWidgetState extends State<RegisterPage> {
           ),
         );
       }
-    } else {
-      // Handle password confirmation error
     }
+    Navigator.of(context).pop();
   }
 
   bool passwordConfirmed() {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:lottie/lottie.dart';
 import 'package:travel_agency/data/constants.dart';
 import 'package:travel_agency/data/get_data.dart';
 import 'package:travel_agency/pages/booking.dart'; // Import the BookingPage
@@ -65,14 +64,6 @@ class _PackagePageState extends State<PackagePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Container(
-              child: Lottie.network(
-                "https://lottie.host/41b32cb9-74c8-47b7-998e-1584275fbf72/5U7mmUlFVa.json",
-                width: 230,
-                height: 230,
-                repeat: false,
-              ),
-            ),
             SizedBox(
               height: 50,
             ),
@@ -114,7 +105,11 @@ class _PackagePageState extends State<PackagePage> {
 
                                   // Extract package name and price
                                   String packageName = packageSnapshot[
-                                      'package']; // Replace 'packageName' with actual field name
+                                      'package']; 
+                                  String cityName = packageSnapshot[
+                                      'city'];
+                                  String days = packageSnapshot['days']
+                                      .toString(); // Convert to String
                                   String packagePrice = packageSnapshot['price']
                                       .toString(); // Convert to String
 
@@ -124,15 +119,17 @@ class _PackagePageState extends State<PackagePage> {
                                     MaterialPageRoute(
                                       builder: (context) => BookingPage(
                                         country: widget.selectedCountry,
+                                        city: cityName,
                                         package: packageName,
                                         price: packagePrice,
+                                        days: days,
                                       ),
                                     ),
                                   );
                                 },
                                 title:
                                     GetPackageData(documentId: docIDs[index]),
-                                tileColor: kSecondaryColor,
+                                tileColor: kPrimaryColor,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(15),
                                 ),
