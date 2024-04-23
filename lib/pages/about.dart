@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:travel_agency/data/constants.dart';
 
 class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: kBackgroundColor,
       appBar: AppBar(
         title: Text('About'),
       ),

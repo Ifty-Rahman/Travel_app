@@ -59,7 +59,7 @@ class _ExploreState extends State<Explore> {
                 child: IconButton(
                   icon: ClipOval(
                     child: UserProfileImage(),
-                  ), // Change this to display user's picture
+                  ),
                   onPressed: () {
                     Scaffold.of(context).openEndDrawer();
                   },
@@ -179,33 +179,16 @@ class _ExploreState extends State<Explore> {
             width: 230,
             decoration: BoxDecoration(
               image: DecorationImage(
+                colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.3),
+                  BlendMode.darken,
+                ),
                 image: AssetImage(place.images[0]),
                 fit: BoxFit.cover,
               ),
             ),
             child: Stack(
               children: <Widget>[
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      place.favorite = !place.favorite;
-                    });
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      left: 12,
-                      top: 12,
-                    ),
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Icon(
-                        place.favorite ? Icons.favorite : Icons.favorite_border,
-                        color: kPrimaryColor,
-                        size: 36,
-                      ),
-                    ),
-                  ),
-                ),
                 Padding(
                   padding: EdgeInsets.only(
                     left: 12,
