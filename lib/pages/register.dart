@@ -4,6 +4,7 @@ import 'package:travel_agency/data/constants.dart';
 import 'package:material_text_fields/material_text_fields.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+
 class RegisterPage extends StatefulWidget {
   final VoidCallback showLoginPage;
   const RegisterPage({Key? key, required this.showLoginPage}) : super(key: key);
@@ -18,6 +19,7 @@ class _MyWidgetState extends State<RegisterPage> {
   final _passwordController = TextEditingController();
   final _confirmpasswordController = TextEditingController();
   final _usernameController = TextEditingController();
+  final _phoneNumberController = TextEditingController(); // New controller for phone number
 
   @override
   void dispose() {
@@ -25,20 +27,20 @@ class _MyWidgetState extends State<RegisterPage> {
     _passwordController.dispose();
     _confirmpasswordController.dispose();
     _usernameController.dispose();
+    _phoneNumberController.dispose(); // Dispose the new controller
     super.dispose();
   }
 
   Future<void> signUp(BuildContext context) async {
-
     // Show loading dialog
-  showDialog(
-    context: context, 
-    builder: (context) {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }
-  );
+    showDialog(
+      context: context, 
+      builder: (context) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+    );
 
     if (passwordConfirmed()) {
       if (_passwordController.text.trim().length >= 6) {
@@ -74,6 +76,7 @@ class _MyWidgetState extends State<RegisterPage> {
               .set({
             'email': _emailController.text.trim(),
             'username': _usernameController.text.trim(),
+            'phoneNumber': _phoneNumberController.text.trim(), // Save phone number
           });
 
           // User successfully created
@@ -97,17 +100,20 @@ class _MyWidgetState extends State<RegisterPage> {
           ),
         );
       }
+    } else {
+      // Show password mismatch error message in a Snackbar
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Passwords do not match!"),
+          duration: Duration(seconds: 2),
+        ),
+      );
     }
-    Navigator.of(context).pop();
+    Navigator.of(context).pop(); // Close loading dialog
   }
 
   bool passwordConfirmed() {
-    if (_passwordController.text.trim() ==
-        _confirmpasswordController.text.trim()) {
-      return true;
-    } else {
-      return false;
-    }
+    return _passwordController.text.trim() == _confirmpasswordController.text.trim();
   }
 
   @override
@@ -124,13 +130,7 @@ class _MyWidgetState extends State<RegisterPage> {
                 width: 350,
                 height: 250,
               ),
-
-              SizedBox(
-                height: 15,
-              ),
-
-              //Hello
-
+              SizedBox(height: 15),
               Text(
                 "Ready to travel?",
                 style: TextStyle(
@@ -139,19 +139,13 @@ class _MyWidgetState extends State<RegisterPage> {
                   color: Color.fromARGB(255, 230, 113, 4),
                 ),
               ),
-
               Text(
                 'Register below with your details.',
                 style: TextStyle(
                   fontSize: 17,
                 ),
               ),
-
-              SizedBox(
-                height: 50,
-              ),
-
-              // Username text field
+              SizedBox(height: 50),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 25),
                 child: MaterialTextField(
@@ -163,13 +157,7 @@ class _MyWidgetState extends State<RegisterPage> {
                   suffixIcon: const Icon(Icons.text_fields),
                 ),
               ),
-
-              SizedBox(
-                height: 10,
-              ),
-
-              // email box
-
+              SizedBox(height: 10),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 25),
                 child: MaterialTextField(
@@ -181,46 +169,45 @@ class _MyWidgetState extends State<RegisterPage> {
                   suffixIcon: const Icon(Icons.check),
                 ),
               ),
-
-              SizedBox(
-                height: 10,
+              SizedBox(height: 10),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 25),
+                child: MaterialTextField(
+                  controller: _phoneNumberController,
+                  keyboardType: TextInputType.phone,
+                  hint: 'Phone Number',
+                  textInputAction: TextInputAction.done,
+                  prefixIcon: const Icon(Icons.phone),
+                  suffixIcon: const Icon(Icons.phone_android),
+                ),
               ),
-
-              // password box
-
+              SizedBox(height: 10),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 25),
                 child: MaterialTextField(
                   controller: _passwordController,
                   keyboardType: TextInputType.visiblePassword,
                   hint: 'Password',
-                  textInputAction: TextInputAction.done,
+                  textInputAction: TextInputAction.next,
                   prefixIcon: const Icon(Icons.lock_outline),
                   suffixIcon: const Icon(Icons.visibility_off),
                   obscureText: true,
                 ),
               ),
-
-              SizedBox(
-                height: 10,
-              ),
-
+              SizedBox(height: 10),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 25),
                 child: MaterialTextField(
                   controller: _confirmpasswordController,
                   keyboardType: TextInputType.visiblePassword,
                   hint: 'Confirm Password',
-                  textInputAction: TextInputAction.done,
+                  textInputAction: TextInputAction.next,
                   prefixIcon: const Icon(Icons.lock_outline),
                   suffixIcon: const Icon(Icons.visibility_off),
                   obscureText: true,
                 ),
               ),
               SizedBox(height: 30),
-
-              // sign in button
-
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: InkWell(
@@ -241,9 +228,6 @@ class _MyWidgetState extends State<RegisterPage> {
                 ),
               ),
               SizedBox(height: 25),
-
-              // register button
-
               Padding(
                 padding: const EdgeInsets.only(bottom: 50),
                 child: Row(

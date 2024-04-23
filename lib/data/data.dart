@@ -131,57 +131,24 @@ List<Destination> getDestinationList() {
 }
 
 class Featured {
-  String year;
   String title;
   String imageUrl;
 
-  Featured(this.year, this.title, this.imageUrl);
+  Featured(this.title, this.imageUrl);
 }
 
 List<Featured> getFeaturedList() {
   return <Featured>[
     Featured(
-      "2019",
-      "Top 5 Beaches",
+      "Top 5 Packages",
       "assets/images/beach.jpg",
     ),
     Featured(
-      "2019",
-      "Best Nightlife Cities",
+      "Best Cities",
       "assets/images/city.jpg",
     ),
     Featured(
-      "2018",
-      "Top 10 Destinations",
-      "assets/images/destination.jpg",
-    ),
-  ];
-}
-
-class Packages {
-  String title;
-  String description;
-  String image;
-  String price;
-
-  Packages(this.title, this.description, this.image, this.price);
-}
-
-List<Featured> getPackagesList() {
-  return <Featured>[
-    Featured(
-      "2019",
-      "Top 5 Beaches",
-      "assets/images/beach.jpg",
-    ),
-    Featured(
-      "2019",
-      "Best Nightlife Cities",
-      "assets/images/city.jpg",
-    ),
-    Featured(
-      "2018",
-      "Top 10 Destinations",
+      "Top 5 Destinations",
       "assets/images/destination.jpg",
     ),
   ];

@@ -19,18 +19,20 @@ class _UserProfileImageState extends State<UserProfileImage> {
   }
 
   void _getUserImageUrl() async {
-    final currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser != null) {
-      final userEmail = currentUser.email!;
-      final userDoc = FirebaseFirestore.instance.collection('users').doc(userEmail);
-      final userData = await userDoc.get();
-      if (userData.exists) {
-        setState(() {
-          _userImageUrl = userData['profile'];
-        });
-      }
+  final currentUser = FirebaseAuth.instance.currentUser;
+  if (currentUser != null) {
+    final userEmail = currentUser.email!;
+    final userDoc = FirebaseFirestore.instance.collection('users').doc(userEmail);
+    final userData = await userDoc.get();
+    final userMap = userData.data(); // Get the document fields as a Map
+
+    if (userMap != null && userMap.containsKey('profile')) {
+      setState(() {
+        _userImageUrl = userMap['profile'];
+      });
     }
   }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +45,10 @@ class _UserProfileImageState extends State<UserProfileImage> {
               
             ),
         )
-        : Container(); // Return an empty container if image URL is not available
+        : CircleAvatar(
+            radius: 30,
+            backgroundColor: Colors.grey,
+            backgroundImage: AssetImage('assets/images/profile.png'),
+          );
   }
 }

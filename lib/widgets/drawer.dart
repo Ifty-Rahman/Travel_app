@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:travel_agency/pages/about.dart';
 import 'package:travel_agency/pages/countries.dart';
 import 'package:travel_agency/pages/explore.dart';
 import 'package:travel_agency/pages/profile.dart';
@@ -151,14 +152,26 @@ class AppDrawer extends StatelessWidget {
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 35),
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.info,
-                      color: Colors.black,
-                    ),
-                    title: Text(
-                      "  About",
-                      style: TextStyle(color: Colors.black),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return AboutPage();
+                          },
+                        ),
+                      );
+                    },
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.info,
+                        color: Colors.black,
+                      ),
+                      title: Text(
+                        "  About",
+                        style: TextStyle(color: Colors.black),
+                      ),
                     ),
                   ),
                 ),

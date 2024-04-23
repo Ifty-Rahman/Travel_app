@@ -84,6 +84,10 @@ class _ShowBookingsPageState extends State<ShowBookingsPage> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),
+                          trailing: IconButton(
+                            onPressed: () {},
+                            icon: Icon(Icons.cancel),
+                          ),
                         ),
                       ),
                     );

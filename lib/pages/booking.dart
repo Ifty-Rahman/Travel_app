@@ -29,8 +29,6 @@ class _BookingPageState extends State<BookingPage> {
   DateTime? _selectedDate;
   int _numberOfPersons = 1;
 
-  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
-
   void _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,

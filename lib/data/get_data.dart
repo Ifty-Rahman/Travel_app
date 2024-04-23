@@ -20,10 +20,33 @@ class GetPackageData extends StatelessWidget {
               snapshot.data!.data() as Map<String, dynamic>;
           return Padding(
             padding: const EdgeInsets.only(left: 10),
-            child: Text(
-              "${data["package"]} \nPrice: ${data["price"]}dollars per person for ${data["days"]} days",
-              style: TextStyle(
-                  color: kTextColor, fontWeight: FontWeight.bold, fontSize: 15),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Package: ${data["package"]}",
+                  style: TextStyle(
+                      color: kTextColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15),
+                ),
+                Text(
+                  "Price: \$${data["price"]} per person",
+                  style: TextStyle(
+                    color: kTextColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                  ),
+                ),
+                Text(
+                  "Duration: ${data["days"]} days",
+                  style: TextStyle(
+                      color: kTextColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15),
+                ),
+              ],
             ),
           );
         }

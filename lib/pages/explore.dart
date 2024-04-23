@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:travel_agency/data/constants.dart';
 import 'package:travel_agency/data/data.dart';
 import 'package:travel_agency/pages/detail.dart';
+import 'package:travel_agency/pages/feature.dart';
 import 'package:travel_agency/widgets/drawer.dart';
 import 'package:travel_agency/pages/packages.dart';
 import 'package:travel_agency/widgets/user_image_profile.dart';
-
 
 class Explore extends StatefulWidget {
   @override
@@ -38,7 +38,9 @@ class _ExploreState extends State<Explore> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Padding(
-          padding: const EdgeInsets.only(left: 5,),
+          padding: const EdgeInsets.only(
+            left: 5,
+          ),
           child: Text(
             "  Explore",
             style: TextStyle(
@@ -340,7 +342,27 @@ class _ExploreState extends State<Explore> {
   }
 
   Widget buildFeatured(Featured featured) {
-    return Padding(
+  return GestureDetector(
+    onTap: () {
+      
+      String featureTitle = '';
+      if (featured.title == "Top 5 Packages") {
+        featureTitle = "Top Booked Packages";
+      } else if (featured.title == "Best Cities") {
+        featureTitle = "Top Booked Cities";
+      } else if (featured.title == "Top 5 Destinations") {
+        featureTitle = "Top Booked Destinations";
+      }
+      print(featureTitle);
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => FeaturePage(featureTitle: featureTitle),
+        ),
+      );
+    },
+    child: Padding(
       padding: EdgeInsets.only(
         bottom: 15,
         left: 12,
@@ -357,6 +379,10 @@ class _ExploreState extends State<Explore> {
         child: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
+              colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.3),
+                BlendMode.darken,
+              ),
               image: AssetImage(featured.imageUrl),
               fit: BoxFit.cover,
             ),
@@ -369,16 +395,8 @@ class _ExploreState extends State<Explore> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(
-                  featured.year,
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
                 SizedBox(
-                  height: 4,
+                  height: 25,
                 ),
                 Text(
                   featured.title,
@@ -393,6 +411,7 @@ class _ExploreState extends State<Explore> {
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }

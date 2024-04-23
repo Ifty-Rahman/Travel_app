@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -28,18 +27,20 @@ class _UserImagePickerState extends State<UserImagePicker> {
   }
 
   void _getUserImageUrl() async {
-    final currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser != null) {
-      final userEmail = currentUser.email!;
-      final userDoc = FirebaseFirestore.instance.collection('users').doc(userEmail);
-      final userData = await userDoc.get();
-      if (userData.exists) {
-        setState(() {
-          _userImageUrl = userData['profile'];
-        });
-      }
+  final currentUser = FirebaseAuth.instance.currentUser;
+  if (currentUser != null) {
+    final userEmail = currentUser.email!;
+    final userDoc = FirebaseFirestore.instance.collection('users').doc(userEmail);
+    final userData = await userDoc.get();
+    final userMap = userData.data(); // Get the document fields as a Map
+
+    if (userMap != null && userMap.containsKey('profile')) {
+      setState(() {
+        _userImageUrl = userMap['profile'];
+      });
     }
   }
+}
 
   void _pickImage() async {
     final pickeImage = await ImagePicker().pickImage(
@@ -75,7 +76,7 @@ class _UserImagePickerState extends State<UserImagePicker> {
         ),
         Positioned(
           bottom: -7,
-          right: 191,
+          right: 177,
           child: IconButton(
             onPressed: _pickImage,
             icon: Icon(
