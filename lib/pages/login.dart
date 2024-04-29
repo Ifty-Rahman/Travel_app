@@ -18,35 +18,36 @@ class _MyWidgetState extends State<LoginPage> {
   final _passwordController = TextEditingController();
 
   Future signIn() async {
-    
-  // Show loading dialog
-  showDialog(
-    context: context, 
-    builder: (context) {
-      return Center(
-        child: CircularProgressIndicator(),
+    // Show loading dialog
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Center(
+            child: CircularProgressIndicator(
+              color: kPrimaryColor,
+              
+            ),
+          );
+        });
+
+    // Sign in with email and password
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+    } catch (e) {
+      // Show SnackBar if sign-in fails
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+              '  Email or password is incorrect!\n  Please enter the correct email and password.'),
+          duration: Duration(seconds: 3),
+        ),
       );
     }
-  );
-
-  // Sign in with email and password
-  try {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: _emailController.text.trim(),
-      password: _passwordController.text.trim(),
-    );
-  } catch (e) {
-    // Show SnackBar if sign-in fails
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('  Email or password is incorrect!\n  Please enter the correct email and password.'),
-        duration: Duration(seconds: 3),
-      ),
-    );
+    Navigator.of(context).pop();
   }
-  Navigator.of(context).pop();
-}
-
 
   @override
   void dispose() {
@@ -189,7 +190,9 @@ class _MyWidgetState extends State<LoginPage> {
                   ),
                 ],
               ),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
 
               // admin button
 

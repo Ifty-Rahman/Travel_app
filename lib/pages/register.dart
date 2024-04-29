@@ -4,7 +4,6 @@ import 'package:travel_agency/data/constants.dart';
 import 'package:material_text_fields/material_text_fields.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
 class RegisterPage extends StatefulWidget {
   final VoidCallback showLoginPage;
   const RegisterPage({Key? key, required this.showLoginPage}) : super(key: key);
@@ -19,7 +18,8 @@ class _MyWidgetState extends State<RegisterPage> {
   final _passwordController = TextEditingController();
   final _confirmpasswordController = TextEditingController();
   final _usernameController = TextEditingController();
-  final _phoneNumberController = TextEditingController(); // New controller for phone number
+  final _phoneNumberController =
+      TextEditingController(); // New controller for phone number
 
   @override
   void dispose() {
@@ -34,13 +34,15 @@ class _MyWidgetState extends State<RegisterPage> {
   Future<void> signUp(BuildContext context) async {
     // Show loading dialog
     showDialog(
-      context: context, 
-      builder: (context) {
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      }
-    );
+        context: context,
+        builder: (context) {
+          return Center(
+            child: CircularProgressIndicator(
+              color: kPrimaryColor,
+              
+            ),
+          );
+        });
 
     if (passwordConfirmed()) {
       if (_passwordController.text.trim().length >= 6) {
@@ -76,7 +78,8 @@ class _MyWidgetState extends State<RegisterPage> {
               .set({
             'email': _emailController.text.trim(),
             'username': _usernameController.text.trim(),
-            'phoneNumber': _phoneNumberController.text.trim(), // Save phone number
+            'phoneNumber':
+                _phoneNumberController.text.trim(), // Save phone number
           });
 
           // User successfully created
@@ -113,7 +116,8 @@ class _MyWidgetState extends State<RegisterPage> {
   }
 
   bool passwordConfirmed() {
-    return _passwordController.text.trim() == _confirmpasswordController.text.trim();
+    return _passwordController.text.trim() ==
+        _confirmpasswordController.text.trim();
   }
 
   @override
