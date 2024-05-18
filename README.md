@@ -14,7 +14,7 @@ The Travel Agency App is a mobile application developed using Flutter and Fireba
 ## Screenshots
 
 ![App Screenshot](https://i.ibb.co/SfCv4Gy/Saturday-18-May-2024-15-40-21.png)
-![App Screenshot](https://i.ibb.co/XttBK9W/Saturday-18-May-2024-15-40-42.png)
+![App Screenshot](https://i.ibb.co/pnVSs5F/Saturday-18-May-2024-15-40-42.png)
 
 ## Installation
 
