@@ -3,9 +3,6 @@
 
 The Travel Agency App is a mobile application developed using Flutter and Firebase that allows users to explore different travel packages, book trips, and manage their bookings. This app provides a seamless experience for users to discover and book their dream vacations.
 
-
-
-
 ## Features
 
 - Package Exploration: Browse through a variety of travel packages sorted by country.
@@ -16,7 +13,7 @@ The Travel Agency App is a mobile application developed using Flutter and Fireba
 
 ## Screenshots
 
-![App Screenshot](https://i.ibb.co/TRShx9G/Saturday-18-May-2024-15-40-21.png)
+![App Screenshot](https://i.ibb.co/SfCv4Gy/Saturday-18-May-2024-15-40-21.png)
 ![App Screenshot](https://i.ibb.co/XttBK9W/Saturday-18-May-2024-15-40-42.png)
 
 ## Installation
