@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_agency/data/constants.dart';
 import 'package:material_text_fields/material_text_fields.dart';
-import 'package:travel_agency/admin/admin_login.dart';
 import 'package:travel_agency/pages/forgot_password.dart';
 
 class LoginPage extends StatefulWidget {
@@ -192,30 +191,6 @@ class _MyWidgetState extends State<LoginPage> {
               ),
               SizedBox(
                 height: 10,
-              ),
-
-              // admin button
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return AdminLoginPage();
-                          },
-                        ),
-                      );
-                    },
-                    child: Text(
-                      " Admin?",
-                      style: TextStyle(color: Colors.orange),
-                    ),
-                  ),
-                ],
               ),
             ],
           ),

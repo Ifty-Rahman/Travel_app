@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:travel_agency/admin/admin_login.dart';
 import 'package:travel_agency/pages/about.dart';
 import 'package:travel_agency/pages/countries.dart';
 import 'package:travel_agency/pages/explore.dart';
@@ -145,6 +146,31 @@ class AppDrawer extends StatelessWidget {
                       ),
                       title: Text(
                         "  Bookings",
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 35),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return AdminLoginPage();
+                          },
+                        ),
+                      );
+                    },
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.admin_panel_settings,
+                        color: Colors.black,
+                      ),
+                      title: Text(
+                        "  Admin Panel",
                         style: TextStyle(color: Colors.black),
                       ),
                     ),

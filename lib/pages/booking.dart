@@ -38,19 +38,21 @@ class _BookingPageState extends State<BookingPage> {
     );
 
     if (pickedDate != null && pickedDate != _selectedDate) {
-      setState(() {
-        _selectedDate = pickedDate;
-      });
+      setState(
+        () {
+          _selectedDate = pickedDate;
+        },
+      );
     }
   }
 
   void navigateToConfirmScreen() {
-  Navigator.of(context).pushReplacement(
-    MaterialPageRoute(
-      builder: (context) => ConfirmScreen(),
-    ),
-  );
-}
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => ConfirmScreen(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
